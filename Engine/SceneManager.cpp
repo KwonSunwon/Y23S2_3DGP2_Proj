@@ -143,21 +143,55 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 	shared_ptr<Scene> scene = make_shared<Scene>();
-	
-#pragma region Camera
+
+#pragma region Player
 	{
-		shared_ptr<GameObject> camera = make_shared<GameObject>();
-		camera->SetName(L"Main_Camera");
-		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
-		camera->AddComponent(make_shared<TestCameraScript>());
-		camera->GetCamera()->SetFar(10000.f);
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		shared_ptr<GameObject> player = make_shared<GameObject>();
+		player->SetName(L"Player");
+		player->AddComponent(make_shared<Transform>());
+		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
+		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 10.f));
+
+		player->AddComponent(make_shared<Camera>());
+		player->GetCamera()->SetFar(10000.f);
+		player->GetCamera()->SetOffset(Vec3(0.f, 0.5f, -5.f));
+		// 뭔가 그려질줄 알았는데 안그려짐
+		//player->GetCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 0.0f, -20.f));
+
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
-		scene->AddGameObject(camera);
-	}	
+		player->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true);
+
+		player->SetStatic(false);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+			meshRenderer->SetMesh(cubeMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		player->AddComponent(meshRenderer);
+		player->AddComponent(make_shared<PlayerMove>());
+		scene->AddGameObject(player);
+	}
 #pragma endregion
+
+	//#pragma region Camera
+	//	{
+	//		shared_ptr<GameObject> camera = make_shared<GameObject>();
+	//		camera->SetName(L"Main_Camera");
+	//		camera->AddComponent(make_shared<Transform>());
+	//		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
+	//		camera->AddComponent(make_shared<TestCameraScript>());
+	//		camera->GetCamera()->SetFar(10000.f);
+	//		camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+	//		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
+	//		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
+	//		scene->AddGameObject(camera);
+	//	}
+	//#pragma endregion
 
 #pragma region UI_Camera
 	{
@@ -197,32 +231,32 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-/*
-#pragma region Object
-	{
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"OBJ");
-		obj->AddComponent(make_shared<Transform>());
-		obj->AddComponent(make_shared<SphereCollider>());
-		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 500.f));
-		obj->SetStatic(false);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+	/*
+	#pragma region Object
 		{
-			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
-			meshRenderer->SetMesh(sphereMesh);
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetName(L"OBJ");
+			obj->AddComponent(make_shared<Transform>());
+			obj->AddComponent(make_shared<SphereCollider>());
+			obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+			obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 500.f));
+			obj->SetStatic(false);
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+				meshRenderer->SetMesh(sphereMesh);
+			}
+			{
+				shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+				meshRenderer->SetMaterial(material->Clone());
+			}
+			dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
+			dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
 		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
-		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
-	}
-#pragma endregion
-*/
+	#pragma endregion
+	*/
 
 #pragma region Terrain
 	{
@@ -291,49 +325,27 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-/*
-#pragma region FBX
-	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
-
-		// Mesh가 여러개인 경우에 사용?
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
+	/*
+	#pragma region FBX
 		{
-			gameObject->SetName(L"Dragon");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			scene->AddGameObject(gameObject);
-			gameObject->AddComponent(make_shared<TestDragon>());
-		}
-	}
-#pragma endregion
-*/
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
 
-#pragma region Player
-	{
-		shared_ptr<GameObject> player = make_shared<GameObject>();
-		player->SetName(L"Player");
-		player->AddComponent(make_shared<Transform>());
-		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
-		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 100.f));
-		player->SetStatic(false);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(cubeMesh);
+			// Mesh가 여러개인 경우에 사용?
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+			for (auto& gameObject : gameObjects)
+			{
+				gameObject->SetName(L"Dragon");
+				gameObject->SetCheckFrustum(false);
+				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+				scene->AddGameObject(gameObject);
+				gameObject->AddComponent(make_shared<TestDragon>());
+			}
 		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		player->AddComponent(meshRenderer);
-		player->AddComponent(make_shared<PlayerMove>());
-		scene->AddGameObject(player);
-	}
-#pragma endregion
+	#pragma endregion
+	*/
+
 
 	return scene;
 }

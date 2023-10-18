@@ -27,5 +27,10 @@ void PlayerMove::Update()
 	if (INPUT->GetButton(KEY_TYPE::D))
 		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
 
+	if (INPUT->GetButton(KEY_TYPE::Q))
+		pos += GetTransform()->GetUp() * _speed * DELTA_TIME;
+	if (INPUT->GetButton(KEY_TYPE::E))
+		pos -= GetTransform()->GetUp() * _speed * DELTA_TIME;
+
 	GetTransform()->SetLocalPosition(pos);
 }
