@@ -155,6 +155,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		player->AddComponent(make_shared<Camera>());
 		player->GetCamera()->SetFar(10000.f);
 		player->GetCamera()->SetOffset(Vec3(0.f, 0.5f, -5.f));
+		// 뭔가 그려질줄 알았는데 안그려짐
+		//player->GetCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 0.0f, -20.f));
 
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		player->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true);

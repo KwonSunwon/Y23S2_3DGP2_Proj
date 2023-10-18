@@ -31,6 +31,8 @@ void Camera::FinalUpdate()
 	Matrix matOffset = Matrix::CreateTranslation(_offset).Invert();
 	_matView *= matOffset;
 
+	S_MatView = _matView;
+
 	if (_type == PROJECTION_TYPE::PERSPECTIVE)
 		_matProjection = ::XMMatrixPerspectiveFovLH(_fov, _width / _height, _near, _far);
 	else
