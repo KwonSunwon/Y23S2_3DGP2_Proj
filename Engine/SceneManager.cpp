@@ -144,21 +144,52 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 	shared_ptr<Scene> scene = make_shared<Scene>();
 
-#pragma region Camera
+#pragma region Player
 	{
-		shared_ptr<GameObject> camera = make_shared<GameObject>();
-		camera->SetName(L"Main_Camera");
-		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45µµ
-		camera->AddComponent(make_shared<TestCameraScript>());
-		camera->GetCamera()->SetFar(10000.f);
-		camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		shared_ptr<GameObject> player = make_shared<GameObject>();
+		player->SetName(L"Player");
+		player->AddComponent(make_shared<Transform>());
+		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
+		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 10.f));
+
+		player->AddComponent(make_shared<Camera>());
+		player->GetCamera()->SetFar(10000.f);
+		player->GetCamera()->SetOffset(Vec3(0.f, 0.5f, -5.f));
+
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI´Â ¾È ÂïÀ½
-		scene->AddGameObject(camera);
+		player->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true);
+
+		player->SetStatic(false);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+			meshRenderer->SetMesh(cubeMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		player->AddComponent(meshRenderer);
+		player->AddComponent(make_shared<PlayerMove>());
+		scene->AddGameObject(player);
 	}
 #pragma endregion
+
+	//#pragma region Camera
+	//	{
+	//		shared_ptr<GameObject> camera = make_shared<GameObject>();
+	//		camera->SetName(L"Main_Camera");
+	//		camera->AddComponent(make_shared<Transform>());
+	//		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45µµ
+	//		camera->AddComponent(make_shared<TestCameraScript>());
+	//		camera->GetCamera()->SetFar(10000.f);
+	//		camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
+	//		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+	//		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
+	//		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI´Â ¾È ÂïÀ½
+	//		scene->AddGameObject(camera);
+	//	}
+	//#pragma endregion
 
 #pragma region UI_Camera
 	{
@@ -313,28 +344,6 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	#pragma endregion
 	*/
 
-#pragma region Player
-	{
-		shared_ptr<GameObject> player = make_shared<GameObject>();
-		player->SetName(L"Player");
-		player->AddComponent(make_shared<Transform>());
-		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
-		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 100.f));
-		player->SetStatic(false);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(cubeMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		player->AddComponent(meshRenderer);
-		player->AddComponent(make_shared<PlayerMove>());
-		scene->AddGameObject(player);
-	}
-#pragma endregion
 
 	return scene;
 }

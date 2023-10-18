@@ -28,7 +28,7 @@ void Camera::FinalUpdate()
 {
 	_matView = GetTransform()->GetLocalToWorldMatrix().Invert();
 
-	Matrix matOffset = Matrix::CreateTranslation(_offset);
+	Matrix matOffset = Matrix::CreateTranslation(_offset).Invert();
 	_matView *= matOffset;
 
 	if (_type == PROJECTION_TYPE::PERSPECTIVE)
