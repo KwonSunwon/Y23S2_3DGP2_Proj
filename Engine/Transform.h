@@ -16,8 +16,6 @@ public:
 	const Vec3& GetLocalRotation() { return _localRotation; }
 	const Vec3& GetLocalScale() { return _localScale; }
 
-	const Vec3& GetLocalOffset() { return _localOffset; }
-
 	// TEMP
 	float GetBoundingSphereRadius() { return max(max(_localScale.x, _localScale.y), _localScale.z); }
 
@@ -31,8 +29,6 @@ public:
 	void SetLocalPosition(const Vec3& position) { _localPosition = position; }
 	void SetLocalRotation(const Vec3& rotation) { _localRotation = rotation; }
 	void SetLocalScale(const Vec3& scale) { _localScale = scale; }
-
-	void SetLocalOffset(const Vec3& offset) { _localOffset = offset; }
 
 	void LookAt(const Vec3& dir);
 
@@ -49,9 +45,7 @@ private:
 	Vec3 _localRotation = {};
 	Vec3 _localScale = { 1.f, 1.f, 1.f };
 
-	Vec3 _localOffset = {};
-
-	Matrix _matLocal = {};
+	Matrix _matLocal= {};
 	Matrix _matWorld = {};
 
 	weak_ptr<Transform> _parent;
