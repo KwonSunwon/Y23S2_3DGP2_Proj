@@ -28,8 +28,8 @@ void Camera::FinalUpdate()
 {
 	_matView = GetTransform()->GetLocalToWorldMatrix().Invert();
 
-	Matrix matOffset = Matrix::CreateTranslation(_offset).Invert();
-	_matView *= matOffset;
+	//Matrix matOffset = Matrix::CreateTranslation(_offset).Invert();
+	//_matView *= matOffset;
 
 	S_MatView = _matView;
 

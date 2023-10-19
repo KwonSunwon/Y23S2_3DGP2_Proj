@@ -144,22 +144,22 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 	shared_ptr<Scene> scene = make_shared<Scene>();
 
+	shared_ptr<GameObject> player = make_shared<GameObject>();
 #pragma region Player
 	{
-		shared_ptr<GameObject> player = make_shared<GameObject>();
 		player->SetName(L"Player");
 		player->AddComponent(make_shared<Transform>());
 		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
 		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 10.f));
 
-		player->AddComponent(make_shared<Camera>());
-		player->GetCamera()->SetFar(10000.f);
-		player->GetCamera()->SetOffset(Vec3(0.f, 0.5f, -5.f));
+		//player->AddComponent(make_shared<Camera>());
+		//player->GetCamera()->SetFar(10000.f);
+		//player->GetCamera()->SetOffset(Vec3(0.f, 0.5f, -5.f));
 		// 뭔가 그려질줄 알았는데 안그려짐
 		//player->GetCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 0.0f, -20.f));
 
-		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		player->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true);
+		//uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
+		//player->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true);
 
 		player->SetStatic(false);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -177,21 +177,23 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-	//#pragma region Camera
-	//	{
-	//		shared_ptr<GameObject> camera = make_shared<GameObject>();
-	//		camera->SetName(L"Main_Camera");
-	//		camera->AddComponent(make_shared<Transform>());
-	//		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
-	//		camera->AddComponent(make_shared<TestCameraScript>());
-	//		camera->GetCamera()->SetFar(10000.f);
-	//		camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
-	//		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-	//		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-	//		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
-	//		scene->AddGameObject(camera);
-	//	}
-	//#pragma endregion
+#pragma region Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
+		//camera->AddComponent(make_shared<TestCameraScript>());
+		camera->GetCamera()->SetFar(10000.f);
+		//camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 1.5f, -5.f));
+		camera->GetTransform()->SetLocalRotation(Vec3(0.3f, 0.f, 0.f));
+		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
+		camera->GetTransform()->SetParent(player->GetTransform());
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
 
 #pragma region UI_Camera
 	{

@@ -38,7 +38,7 @@ public:
 	void SetCullingMask(uint32 mask) { _cullingMask = mask; }
 	bool IsCulled(uint8 layer) { return (_cullingMask & (1 << layer)) != 0; }
 
-	void SetOffset(Vec3 offset) { _offset = offset; }
+	//void SetOffset(Vec3 offset) { _offset = offset; }
 
 	void SetNear(float value) { _near = value; }
 	void SetFar(float value) { _far = value; }
@@ -53,7 +53,7 @@ public:
 private:
 	PROJECTION_TYPE _type = PROJECTION_TYPE::PERSPECTIVE;
 
-	Vec3 _offset = {};
+	//Vec3 _offset = {};
 
 	float _near = 1.f;
 	float _far = 1000.f;
