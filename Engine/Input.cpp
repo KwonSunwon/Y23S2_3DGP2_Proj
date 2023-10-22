@@ -6,6 +6,14 @@ void Input::Init(HWND hwnd)
 {
 	_hwnd = hwnd;
 	_states.resize(KEY_TYPE_COUNT, KEY_STATE::NONE);
+
+	auto windowInfo = GEngine->GetWindow();
+	POINT center = { windowInfo.width / 2, windowInfo.height / 2 };
+	//::ScreenToClient(GEngine->GetWindow().hwnd, &center);
+	::SetCursorPos(center.x, center.y);
+	//::ShowCursor(false);
+
+	_mousePos = center;
 }
 
 void Input::Update()
@@ -49,5 +57,5 @@ void Input::Update()
 	}
 
 	::GetCursorPos(&_mousePos);
-	::ScreenToClient(GEngine->GetWindow().hwnd, &_mousePos);
+	//::ScreenToClient(GEngine->GetWindow().hwnd, &_mousePos);
 }

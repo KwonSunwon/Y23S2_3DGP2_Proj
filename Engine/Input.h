@@ -24,6 +24,8 @@ enum class KEY_TYPE
 
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
+
+	ESC = VK_ESCAPE,
 };
 
 enum class KEY_STATE
@@ -55,7 +57,7 @@ public:
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
 	// ∏« √≥¿Ω ¥≠∑∂¥Ÿ ∂√¿ª ∂ß
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
-	
+
 	const POINT& GetMousePos() { return _mousePos; }
 
 private:

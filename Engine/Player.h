@@ -9,5 +9,10 @@ public:
 	virtual void Update() override;
 
 private:
-	float _speed = 5.f;
+	// movemet
+	float _movementSpeed = 5.f;
+
+	// mouse
+	float _mouseSensitivity = 0.01f;
+	POINT _oldMousePos = {};
 };
