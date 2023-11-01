@@ -149,8 +149,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		player->SetName(L"Player");
 		player->AddComponent(make_shared<Transform>());
-		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
 		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 10.f));
+		player->GetTransform()->SetLocalScale(Vec3(0.1f, 0.1f, 0.1f));
+		player->GetTransform()->SetLocalRotation(Vec3(0.f, 0.f, 0.f));
 
 		//player->AddComponent(make_shared<Camera>());
 		//player->GetCamera()->SetFar(10000.f);
@@ -164,14 +165,25 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		player->SetStatic(false);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
+			//shared_ptr<MeshData> tankMesh = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Tank.fbx");
+			//vector<shared_ptr<GameObject>> gameObjects = tankMesh->Instantiate();
+
+			//for (auto& gameObject : gameObjects) {
+				//gameObject->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
+				//gameObject->GetTransform()->SetParent(player->GetTransform());
+				//scene->AddGameObject(gameObject);
+			//}
+
+			//shared_ptr<Mesh> mesh = dynamic_cast<Mesh>(tankMesh->Instantiate()[0]);
+
 			shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
 			meshRenderer->SetMesh(cubeMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
+			//shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+			//meshRenderer->SetMaterial(material->Clone());
 		}
-		player->AddComponent(meshRenderer);
+		//player->AddComponent(meshRenderer);
 		player->AddComponent(make_shared<PlayerMove>());
 		scene->AddGameObject(player);
 	}
@@ -186,8 +198,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(10000.f);
 		//camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 1.5f, -5.f));
-		camera->GetTransform()->SetLocalRotation(Vec3(0.3f, 0.f, 0.f));
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, -500.f));
+		camera->GetTransform()->SetLocalRotation(Vec3(0.f, 0.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
 		camera->GetTransform()->SetParent(player->GetTransform());
@@ -327,26 +339,37 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-	/*
-	#pragma region FBX
+
+#pragma region FBX
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Tank.fbx");
+
+		// Mesh가 여러개인 경우에 사용?
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		//for (auto& gameObject : gameObjects)
+		//{
+			//gameObject->SetName(L"Dragon");
+			//gameObject->SetCheckFrustum(false);
+			//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+			//gameObject->GetTransform()->SetLocalScale(Vec3(0.3f, 0.3f, 0.3f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
+			//scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		//}
+
+		for (int i = 0; i < gameObjects.size(); i++)
 		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
-
-			// Mesh가 여러개인 경우에 사용?
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Dragon");
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				scene->AddGameObject(gameObject);
-				gameObject->AddComponent(make_shared<TestDragon>());
-			}
+			gameObjects[i]->SetName(L"Dragon");
+			gameObjects[i]->SetCheckFrustum(false);
+			gameObjects[i]->GetTransform()->SetLocalPosition(Vec3(i * 40.f, 0.f, 300.f));
+			gameObjects[i]->GetTransform()->SetLocalScale(Vec3(0.3f, 0.3f, 0.3f));
+			gameObjects[i]->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
+			scene->AddGameObject(gameObjects[i]);
+			gameObjects[i]->AddComponent(make_shared<TestDragon>());
 		}
-	#pragma endregion
-	*/
+	}
+#pragma endregion
 
 
 	return scene;

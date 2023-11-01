@@ -10,7 +10,7 @@ public:
 
 private:
 	// movemet
-	float _movementSpeed = 5.f;
+	float _movementSpeed = 500.f;
 
 	// mouse
 	float _mouseSensitivity = 0.01f;
