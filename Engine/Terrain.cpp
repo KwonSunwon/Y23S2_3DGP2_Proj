@@ -45,6 +45,15 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 		shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"Terrain");
 		meshRenderer->SetMaterial(material);
 	}
+
+	// for player collision terrain hieht
+	uint8_t* pixels;
+	size_t size = heightMap->GetImage().GetPixelsSize();
+	//memcpy(pixels, heightMap->GetImage().GetPixels(), size);
+	pixels = heightMap->GetImage().GetPixels();
+	for (int i = 0; i < size; i++) {
+		_heightMap.push_back(pixels[i] / 255.f);
+	}
 }
 
 void Terrain::FinalUpdate()

@@ -156,6 +156,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

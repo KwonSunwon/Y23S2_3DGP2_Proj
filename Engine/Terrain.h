@@ -17,6 +17,8 @@ private:
 	float _maxTesselation = 4.f;
 
 	shared_ptr<class Material> _material;
+
+	std::vector<float> _heightMap;
 };
 
 
