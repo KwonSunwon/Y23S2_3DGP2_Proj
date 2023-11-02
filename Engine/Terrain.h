@@ -9,6 +9,8 @@ public:
 
 	void Init(int32 sizeX, int32 sizeZ);
 
+	float GetHeight(float x, float z);
+
 	virtual void FinalUpdate() override;
 
 private:

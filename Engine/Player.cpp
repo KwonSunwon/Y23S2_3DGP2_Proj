@@ -36,6 +36,8 @@ void PlayerMove::Update()
 	if (INPUT->GetButton(KEY_TYPE::ESC))
 		PostQuitMessage(0);
 
+	pos.y = GET_SINGLE(SceneManager)->GetHeight(pos.x, pos.z);
+
 	POINT mousePos = INPUT->GetMousePos();
 	float deltaX = static_cast<float>(mousePos.x - _oldMousePos.x);
 	float deltaY = static_cast<float>(mousePos.y - _oldMousePos.y);

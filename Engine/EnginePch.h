@@ -35,7 +35,7 @@ using namespace Microsoft::WRL;
 
 #include "FBX/fbxsdk.h"
 
-#include "DDSTextureLoader12.h"
+//#include "DDSTextureLoader12.h"
 
 // °¢Á¾ lib
 #pragma comment(lib, "d3d12")

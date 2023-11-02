@@ -115,6 +115,18 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 	return picked;
 }
+float SceneManager::GetHeight(float x, float z)
+{
+	auto& gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+	for (auto& gameObject : gameObjects) {
+		if (gameObject->GetTerrain() == nullptr)
+			continue;
+
+		return gameObject->GetTerrain()->GetHeight(x, z);
+	}
+	return 0.f;
+}
+
 shared_ptr<Scene> SceneManager::LoadTestScene()
 {
 #pragma region LayerMask
@@ -150,7 +162,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		player->SetName(L"Player");
 		player->AddComponent(make_shared<Transform>());
 		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
-		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 10.f));
+		player->GetTransform()->SetLocalPosition(Vec3(50.f, 80.f, 50.f));
 
 		//player->AddComponent(make_shared<Camera>());
 		//player->GetCamera()->SetFar(10000.f);
@@ -268,7 +280,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->AddComponent(make_shared<MeshRenderer>());
 
 		obj->GetTransform()->SetLocalScale(Vec3(50.f, 250.f, 50.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -200.f, 300.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
 		obj->GetTerrain()->Init(64, 64);
 		obj->SetCheckFrustum(false);
