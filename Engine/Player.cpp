@@ -37,16 +37,19 @@ void PlayerMove::Update()
 		PostQuitMessage(0);
 
 	pos.y = GET_SINGLE(SceneManager)->GetHeight(pos.x, pos.z);
-
-	POINT mousePos = INPUT->GetMousePos();
-	float deltaX = static_cast<float>(mousePos.x - _oldMousePos.x);
-	float deltaY = static_cast<float>(mousePos.y - _oldMousePos.y);
-	Vec3 rot = GetTransform()->GetLocalRotation();
-	rot.y += deltaX * _mouseSensitivity;
-	rot.x += deltaY * _mouseSensitivity;
-
-	::SetCursorPos(_oldMousePos.x, _oldMousePos.y);
-
-	GetTransform()->SetLocalRotation(rot);
 	GetTransform()->SetLocalPosition(pos);
+
+	// 게임이 현재 활성화된 윈도우라면
+	if (::GetFocus() != NULL) {
+		POINT mousePos = INPUT->GetMousePos();
+		float deltaX = static_cast<float>(mousePos.x - _oldMousePos.x);
+		float deltaY = static_cast<float>(mousePos.y - _oldMousePos.y);
+		Vec3 rot = GetTransform()->GetLocalRotation();
+		rot.y += deltaX * _mouseSensitivity;
+		rot.x += deltaY * _mouseSensitivity;
+
+		::SetCursorPos(_oldMousePos.x, _oldMousePos.y);
+
+		GetTransform()->SetLocalRotation(rot);
+	}
 }
