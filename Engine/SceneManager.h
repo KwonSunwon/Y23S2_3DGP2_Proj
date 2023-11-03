@@ -6,7 +6,7 @@ enum
 {
 	MAX_LAYER = 32
 };
-
+ 
 class SceneManager
 {
 	DECLARE_SINGLE(SceneManager);
@@ -31,7 +31,7 @@ private:
 
 private:
 	shared_ptr<Scene> _activeScene;
-
+	 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
 };
