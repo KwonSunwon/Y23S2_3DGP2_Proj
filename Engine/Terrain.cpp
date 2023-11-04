@@ -19,10 +19,17 @@ Terrain::~Terrain()
 {
 }
 
-void Terrain::Init(int32 sizeX, int32 sizeZ)
+void Terrain::Init(int32 sizeX, int32 sizeZ, float scale, float heightScale)
 {
-	_sizeX = 2048;
-	_sizeZ = 2048;
+	dynamic_cast<Component*>(this)->GetTransform()->SetLocalScale(Vec3(scale, heightScale, scale));
+
+	_scale = scale;
+	_heightScale = heightScale;
+
+	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(L"HeightMap", L"..\\Resources\\Texture\\Terrain\\height.png");
+
+	_sizeX = heightMap->GetWidth();
+	_sizeZ = heightMap->GetHeight();
 
 	_material = GET_SINGLE(Resources)->Get<Material>(L"Terrain");
 
@@ -30,7 +37,6 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 	_material->SetInt(2, _sizeZ);
 	_material->SetFloat(0, _maxTesselation);
 
-	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(L"HeightMap", L"..\\Resources\\Texture\\Terrain\\height.png");
 	Vec2 v = Vec2(heightMap->GetWidth(), heightMap->GetHeight());
 	_material->SetVec2(0, Vec2(heightMap->GetWidth(), heightMap->GetHeight()));
 	_material->SetVec2(1, Vec2(1000.f, 5000.f));
@@ -51,9 +57,9 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 	size_t size = heightMap->GetImage().GetPixelsSize();
 	//memcpy(pixels, heightMap->GetImage().GetPixels(), size);
 	pixels = heightMap->GetImage().GetPixels();
-	_heightMap.reserve(size);
+	_pixels.reserve(size);
 	for (int i = 0; i < size; i++) {
-		_heightMap.push_back((pixels[i] / 255.f) * 250.f);
+		_pixels.push_back((pixels[i] / 255.f) * _heightScale);
 	}
 	//std::reverse(_heightMap.begin(), _heightMap.end());
 	//for (int i = 0; i < sizeX; i++) {
@@ -69,8 +75,8 @@ float Terrain::GetHeight(float x, float z)
 	//return _heightMap[x + (z * _sizeZ)];
 
 	bool reverseQuad = ((static_cast<int>(z) % 2) != 0);
-	x = x / 1.f;
-	z = z / 1.f;
+	x = x / _scale;
+	z = z / _scale;
 	if ((x < 0.0f) || (z < 0.0f) || (x >= _sizeX) || (z >= _sizeZ)) return(-100.0f);
 
 	int ix = (int)x;
@@ -83,10 +89,10 @@ float Terrain::GetHeight(float x, float z)
 	//float topLeft = (float)_heightMap[ix + ((iz + 1) * _sizeX)];
 	//float topRight = (float)_heightMap[(ix + 1) + ((iz + 1) * _sizeX)];
 
-	float bottomLeft = (float)_heightMap[x + (_sizeZ - 1 - z) * _sizeX];
-	float bottomRight = (float)_heightMap[x + 1 + (_sizeZ - 1 - z) * _sizeX];
-	float topLeft = (float)_heightMap[x + (_sizeZ - 2 - z) * _sizeX];
-	float topRight = (float)_heightMap[x + 1 + (_sizeZ - 2 - z) * _sizeX];
+	float bottomLeft = (float)_pixels[ix + (_sizeZ - 1 - iz) * _sizeX];
+	float bottomRight = (float)_pixels[ix + 1 + (_sizeZ - 1 - iz) * _sizeX];
+	float topLeft = (float)_pixels[ix + (_sizeZ - 2 - iz) * _sizeX];
+	float topRight = (float)_pixels[ix + 1 + (_sizeZ - 2 - iz) * _sizeX];
 
 	//if (reverseQuad)
 	//{
@@ -96,7 +102,7 @@ float Terrain::GetHeight(float x, float z)
 	//		topLeft = topRight + (bottomLeft - bottomRight);
 	//}
 	//else
-	//{ 
+	//{
 	//	if (zPercent < (1.0f - xPercent))
 	//		topRight = topLeft + (bottomRight - bottomLeft);
 	//	else
