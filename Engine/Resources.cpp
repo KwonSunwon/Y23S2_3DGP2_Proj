@@ -215,14 +215,14 @@ shared_ptr<Mesh> Resources::LoadSphereMesh()
 			//  [y, x]-[y, x+1]
 			//  |		/
 			//  [y+1, x]
-			idx.push_back(1 + (y) * ringVertexCount + (x));
-			idx.push_back(1 + (y) * ringVertexCount + (x + 1));
+			idx.push_back(1 + (y)*ringVertexCount + (x));
+			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
 			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
 			//		 [y, x+1]
 			//		 /	  |
 			//  [y+1, x]-[y+1, x+1]
 			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
-			idx.push_back(1 + (y) * ringVertexCount + (x + 1));
+			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
 			idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
 		}
 	}
@@ -571,6 +571,29 @@ void Resources::CreateDefaultShader()
 		Add<Shader>(L"Terrain", shader);
 	}
 
+	// Water
+	{
+		ShaderInfo info =
+		{
+			SHADER_TYPE::FORWARD,
+			RASTERIZER_TYPE::CULL_NONE,
+			DEPTH_STENCIL_TYPE::LESS,
+		};
+
+		ShaderArg arg =
+		{
+			"VS_Main",
+			"",
+			"",
+			"",
+			"PS_Main",
+		};
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\water.fx", info, arg);
+		Add<Shader>(L"Water", shader);
+	}
+
 	// ComputeAnimation
 	{
 		shared_ptr<Shader> shader = make_shared<Shader>();
@@ -685,6 +708,20 @@ void Resources::CreateDefaultMaterial()
 		material->SetShader(shader);
 		material->SetTexture(0, texture);
 		Add<Material>(L"Terrain", material);
+	}
+
+	// Water
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Water");
+		shared_ptr<Texture> texture0 = GET_SINGLE(Resources)->Load<Texture>(L"Water0", L"..\\Resources\\Texture\\Water_Base_Texture_0.dds");
+		shared_ptr<Texture> texture1 = GET_SINGLE(Resources)->Load<Texture>(L"Water1", L"..\\Resources\\Texture\\Water_Detail_Texture_0.dds");
+		shared_ptr<Texture> texture2 = GET_SINGLE(Resources)->Load<Texture>(L"Water2", L"..\\Resources\\Texture\\Water_Texture_Alpha.dds");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture0);
+		material->SetTexture(1, texture1);
+		material->SetTexture(2, texture2);
+		Add<Material>(L"Water", material);
 	}
 
 	// ComputeAnimation

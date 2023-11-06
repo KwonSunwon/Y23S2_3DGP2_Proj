@@ -17,6 +17,7 @@ void Timer::Update()
 
 	_frameCount++;
 	_frameTime += _deltaTime;
+	_elapsedTime += _deltaTime;
 
 	if (_frameTime > 1.f)
 	{

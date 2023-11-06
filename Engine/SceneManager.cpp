@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+#include "Timer.h"
+
 #include "Engine.h"
 #include "Material.h"
 #include "GameObject.h"
@@ -18,6 +20,7 @@
 #include "MeshData.h"
 #include "TestDragon.h"
 #include "Player.h"
+#include "TerrainWater.h"
 
 void SceneManager::Update()
 {
@@ -242,6 +245,41 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		}
 		skybox->AddComponent(meshRenderer);
 		scene->AddGameObject(skybox);
+	}
+#pragma endregion
+
+#pragma region TerrainWater
+	{
+		shared_ptr<GameObject> water = make_shared<GameObject>();
+		water->AddComponent(make_shared<Transform>());
+		water->GetTransform()->SetLocalScale(Vec3(10.f, 1.f, 10.f));
+		water->GetTransform()->SetLocalPosition(Vec3(0.f, 75.f, 0.f));
+		water->SetCheckFrustum(false);
+		water->SetStatic(true);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadTerrainMesh(257, 257);
+			meshRenderer->SetMesh(mesh);
+		}
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Water");
+			shared_ptr<Texture> texture0 = GET_SINGLE(Resources)->Load<Texture>(L"Water0", L"..\\Resources\\Texture\\Water_Base_Texture_0.dds");
+			shared_ptr<Texture> texture1 = GET_SINGLE(Resources)->Load<Texture>(L"Water1", L"..\\Resources\\Texture\\Water_Detail_Texture_0.dds");
+			shared_ptr<Texture> texture2 = GET_SINGLE(Resources)->Load<Texture>(L"Water2", L"..\\Resources\\Texture\\Water_Texture_Alpha.dds");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture0);
+			material->SetTexture(1, texture1);
+			material->SetTexture(2, texture2);
+			//material->SetFloat(0, GET_SINGLE(Timer)->GetFrameTime()); // 생각해보니 매 프레임마다 전달 해야함
+			meshRenderer->SetMaterial(material);
+
+			shared_ptr<TerrainWater> terrainWater = make_shared<TerrainWater>();
+			terrainWater->SetMaterial(material);
+			water->AddComponent(terrainWater);
+		}
+		water->AddComponent(meshRenderer);
+		scene->AddGameObject(water);
 	}
 #pragma endregion
 
