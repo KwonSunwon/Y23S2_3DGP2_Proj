@@ -17,6 +17,7 @@ struct VS_OUT
 };
 
 // g_float_0 : time
+// g_mat_0 : animatino matrix
 
 VS_OUT VS_Main(VS_IN input)
 {
@@ -37,7 +38,8 @@ float4 PS_Main(VS_OUT input) : SV_Target
 {
     float2 uv = input.uv;
 
-    uv.y += g_float_0 * 0.00125f;
+    uv = mul(float3(input.uv, 1.0f), (float3x3) g_mat_0).xy;
+    // uv.y += g_float_0 * 0.00125f
 
     float4 cBaseTexColor = g_tex_0.SampleLevel(g_sam_0, uv, 0);
     float4 cDetail0TexColor = g_tex_1.SampleLevel(g_sam_0, uv * 10.0f, 0);

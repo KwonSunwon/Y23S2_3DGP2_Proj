@@ -13,5 +13,6 @@ public:
 
 private:
 	shared_ptr<Material> _material;
+	Matrix _animationMatrix;
 };
 

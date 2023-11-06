@@ -253,7 +253,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		shared_ptr<GameObject> water = make_shared<GameObject>();
 		water->AddComponent(make_shared<Transform>());
 		water->GetTransform()->SetLocalScale(Vec3(10.f, 1.f, 10.f));
-		water->GetTransform()->SetLocalPosition(Vec3(0.f, 75.f, 0.f));
+		water->GetTransform()->SetLocalPosition(Vec3(0.f, 80.f, 0.f));
 		water->SetCheckFrustum(false);
 		water->SetStatic(true);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
