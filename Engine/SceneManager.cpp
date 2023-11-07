@@ -21,6 +21,7 @@
 #include "TestDragon.h"
 #include "Player.h"
 #include "TerrainWater.h"
+#include "Billboard.h"
 
 void SceneManager::Update()
 {
@@ -377,27 +378,16 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-	/*
-	#pragma region FBX
-		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
+#pragma region Billboard
+	{
+		shared_ptr<GameObject> billboard = make_shared<GameObject>();
+		billboard->AddComponent(make_shared<Transform>());
+		billboard->GetTransform()->SetLocalPosition(Vec3(0, 1000, 500));
+		billboard->AddComponent(make_shared<Billboard>());
 
-			// Mesh가 여러개인 경우에 사용?
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Dragon");
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				scene->AddGameObject(gameObject);
-				gameObject->AddComponent(make_shared<TestDragon>());
-			}
-		}
-	#pragma endregion
-	*/
-
+		scene->AddGameObject(billboard);
+	}
+#pragma endregion
 
 	return scene;
 }

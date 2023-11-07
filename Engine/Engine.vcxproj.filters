@@ -25,7 +25,7 @@
     <Filter Include="Object\Component\Collider">
       <UniqueIdentifier>{054eccde-e1ba-451d-925b-5547022cbf4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Custom">
+    <Filter Include="Object\MonoBehaviour">
       <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -88,7 +88,7 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="TestCameraScript.cpp">
-      <Filter>Object\Custom</Filter>
+      <Filter>Object\MonoBehaviour</Filter>
     </ClCompile>
     <ClCompile Include="Resources.cpp">
       <Filter>Manager</Filter>
@@ -151,15 +151,20 @@
       <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="TestDragon.cpp">
-      <Filter>Object\Custom</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Object\Custom</Filter>
+      <Filter>Object\MonoBehaviour</Filter>
     </ClCompile>
     <ClCompile Include="DDSTextureLoader12.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainWater.cpp" />
+    <ClCompile Include="Player.cpp">
+      <Filter>Object\MonoBehaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainWater.cpp">
+      <Filter>Object\MonoBehaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="Billboard.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -223,7 +228,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="TestCameraScript.h">
-      <Filter>Object\Custom</Filter>
+      <Filter>Object\MonoBehaviour</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h">
       <Filter>Manager</Filter>
@@ -286,15 +291,20 @@
       <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="TestDragon.h">
-      <Filter>Object\Custom</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Object\Custom</Filter>
+      <Filter>Object\MonoBehaviour</Filter>
     </ClInclude>
     <ClInclude Include="DDSTextureLoader12.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainWater.h" />
+    <ClInclude Include="Player.h">
+      <Filter>Object\MonoBehaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainWater.h">
+      <Filter>Object\MonoBehaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="Billboard.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -342,6 +352,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\water.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="billboard.fx">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
