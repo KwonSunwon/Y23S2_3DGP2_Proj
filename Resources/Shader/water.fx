@@ -17,7 +17,7 @@ struct VS_OUT
 };
 
 // g_float_0 : time
-// g_mat_0 : animatino matrix
+// g_mat_0 : animation matrix
 
 VS_OUT VS_Main(VS_IN input)
 {
