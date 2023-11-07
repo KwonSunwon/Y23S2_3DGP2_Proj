@@ -377,26 +377,37 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-	/*
-	#pragma region FBX
+
+#pragma region FBX
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Tank.fbx");
+
+		// Mesh가 여러개인 경우에 사용?
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		//for (auto& gameObject : gameObjects)
+		//{
+			//gameObject->SetName(L"Dragon");
+			//gameObject->SetCheckFrustum(false);
+			//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+			//gameObject->GetTransform()->SetLocalScale(Vec3(0.3f, 0.3f, 0.3f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
+			//scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		//}
+
+		for (int i = 0; i < gameObjects.size(); i++)
 		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
-
-			// Mesh가 여러개인 경우에 사용?
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Dragon");
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				scene->AddGameObject(gameObject);
-				gameObject->AddComponent(make_shared<TestDragon>());
-			}
+			gameObjects[i]->SetName(L"Dragon");
+			gameObjects[i]->SetCheckFrustum(false);
+			gameObjects[i]->GetTransform()->SetLocalPosition(Vec3(i * 40.f, 0.f, 300.f));
+			gameObjects[i]->GetTransform()->SetLocalScale(Vec3(0.3f, 0.3f, 0.3f));
+			gameObjects[i]->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
+			scene->AddGameObject(gameObjects[i]);
+			gameObjects[i]->AddComponent(make_shared<TestDragon>());
 		}
-	#pragma endregion
-	*/
+	}
+#pragma endregion
 
 
 	return scene;
