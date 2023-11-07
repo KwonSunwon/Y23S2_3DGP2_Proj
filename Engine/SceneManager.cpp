@@ -164,29 +164,20 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		player->SetName(L"Player");
 		player->AddComponent(make_shared<Transform>());
-		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
 		player->GetTransform()->SetLocalPosition(Vec3(50.f, 80.f, 50.f));
-
-		//player->AddComponent(make_shared<Camera>());
-		//player->GetCamera()->SetFar(10000.f);
-		//player->GetCamera()->SetOffset(Vec3(0.f, 0.5f, -5.f));
-		// 뭔가 그려질줄 알았는데 안그려짐
-		//player->GetCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 0.0f, -20.f));
-
-		//uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		//player->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true);
+		player->GetTransform()->SetLocalRotation(Vec3(0.f, 0.f, 0.f));
 
 		player->SetStatic(false);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(cubeMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		player->AddComponent(meshRenderer);
+		//shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		//{
+		//	shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+		//	meshRenderer->SetMesh(cubeMesh);
+		//}
+		//{
+		//	shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+		//	meshRenderer->SetMaterial(material->Clone());
+		//}
+		//player->AddComponent(meshRenderer);
 		player->AddComponent(make_shared<PlayerMove>());
 		scene->AddGameObject(player);
 	}
@@ -201,8 +192,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(10000.f);
 		//camera->GetCamera()->SetOffset(Vec3(0.f, 0.f, 0.f));
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 1.5f, -5.f));
-		camera->GetTransform()->SetLocalRotation(Vec3(0.3f, 0.f, 0.f));
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, -200.f));
+		camera->GetTransform()->SetLocalRotation(Vec3(0.4f, 0.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
 		camera->GetTransform()->SetParent(player->GetTransform());
@@ -382,9 +373,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		shared_ptr<GameObject> tank = make_shared<GameObject>();
 		tank->AddComponent(make_shared<Transform>());
-		tank->GetTransform()->SetLocalPosition(Vec3(50, 90, 0));
-		//tank->GetTransform()->SetLocalRotation(Vec3(-1.6f, 0, 0));
+		tank->GetTransform()->SetLocalPosition(Vec3(0.f, 20.f, 0.f));
+		tank->GetTransform()->SetLocalRotation(Vec3(0.f, 3.14f, 0.f));
 		tank->GetTransform()->SetLocalScale(Vec3(0.2f, 0.2f, 0.2f));
+		tank->GetTransform()->SetParent(player->GetTransform());
 		tank->SetCheckFrustum(false);
 
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\tank.fbx");
