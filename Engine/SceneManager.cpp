@@ -378,34 +378,81 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 
-#pragma region FBX
+#pragma region FBX Tank
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Tank.fbx");
+		shared_ptr<GameObject> tank = make_shared<GameObject>();
+		tank->AddComponent(make_shared<Transform>());
+		tank->GetTransform()->SetLocalPosition(Vec3(50, 90, 0));
+		//tank->GetTransform()->SetLocalRotation(Vec3(-1.6f, 0, 0));
+		tank->GetTransform()->SetLocalScale(Vec3(0.2f, 0.2f, 0.2f));
+		tank->SetCheckFrustum(false);
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\tank.fbx");
 
 		// Mesh가 여러개인 경우에 사용?
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
-		//for (auto& gameObject : gameObjects)
+		//for (int i = 0; i < gameObjects.size(); i++)
 		//{
-			//gameObject->SetName(L"Dragon");
-			//gameObject->SetCheckFrustum(false);
-			//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-			//gameObject->GetTransform()->SetLocalScale(Vec3(0.3f, 0.3f, 0.3f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
-			//scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
+		//	gameObjects[i]->SetName(L"Dragon");
+		//	gameObjects[i]->SetCheckFrustum(false);
+		//	gameObjects[i]->GetTransform()->SetLocalPosition(Vec3(i * 40.f, 90.f, 10.f));
+		//	gameObjects[i]->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
+		//	gameObjects[i]->GetTransform()->SetParent(tank->GetTransform());
+		//	scene->AddGameObject(gameObjects[i]);
+		//	gameObjects[i]->AddComponent(make_shared<TestDragon>());
 		//}
 
-		for (int i = 0; i < gameObjects.size(); i++)
-		{
-			gameObjects[i]->SetName(L"Dragon");
-			gameObjects[i]->SetCheckFrustum(false);
-			gameObjects[i]->GetTransform()->SetLocalPosition(Vec3(i * 40.f, 0.f, 300.f));
-			gameObjects[i]->GetTransform()->SetLocalScale(Vec3(0.3f, 0.3f, 0.3f));
-			gameObjects[i]->GetTransform()->SetLocalRotation(Vec3(-90.f, 0.f, 0.f));
-			scene->AddGameObject(gameObjects[i]);
-			gameObjects[i]->AddComponent(make_shared<TestDragon>());
+		{// Body
+			shared_ptr<GameObject> body = gameObjects[0];
+			body->SetName(L"Tank_Body");
+			body->SetCheckFrustum(false);
+			body->GetTransform()->SetLocalPosition(Vec3(0.f, 10.f, 0.f));
+			body->GetTransform()->SetLocalRotation(Vec3(-1.6f, 0.f, 0.f));
+			body->GetTransform()->SetParent(tank->GetTransform());
+			scene->AddGameObject(body);
 		}
+		{// Cannon
+			shared_ptr<GameObject> cannon = gameObjects[1];
+			cannon->SetName(L"Tank_Cannon");
+			cannon->SetCheckFrustum(false);
+			cannon->GetTransform()->SetLocalPosition(Vec3(0.f, 80.f, -50.f));
+			cannon->GetTransform()->SetLocalRotation(Vec3(-1.6f, 0.f, 0.f));
+			cannon->GetTransform()->SetParent(tank->GetTransform());
+			scene->AddGameObject(cannon);
+		}
+		{// Tower
+			shared_ptr<GameObject> tower = gameObjects[2];
+			tower->SetName(L"Tank_Tower");
+			tower->SetCheckFrustum(false);
+			tower->GetTransform()->SetLocalPosition(Vec3(0.f, 58.f, 10.f));
+			tower->GetTransform()->SetLocalRotation(Vec3(-1.6f, 0.f, 0.f));
+			tower->GetTransform()->SetParent(tank->GetTransform());
+			scene->AddGameObject(tower);
+		}
+		{// Wheel
+			int idx = 3;
+			array<shared_ptr<GameObject>, 4> wheels;
+			for (auto& wheel : wheels)
+				wheel = gameObjects[idx++];
+			wheels[0]->SetName(L"Tank_Wheel_0");
+			wheels[1]->SetName(L"Tank_Wheel_1");
+			wheels[2]->SetName(L"Tank_Wheel_2");
+			wheels[3]->SetName(L"Tank_Wheel_3");
+			wheels[0]->GetTransform()->SetLocalPosition(Vec3(70.f, -10.f, 60.f));
+			wheels[1]->GetTransform()->SetLocalPosition(Vec3(-70.f, -10.f, 60.f));
+			wheels[2]->GetTransform()->SetLocalPosition(Vec3(70.f, -10.f, -60.f));
+			wheels[3]->GetTransform()->SetLocalPosition(Vec3(-70.f, -10.f, -60.f));
+
+			for (auto& wheel : wheels) {
+				wheel->GetTransform()->SetLocalRotation(Vec3(-1.6f, 0.f, 0.f));
+				wheel->SetCheckFrustum(false);
+				wheel->GetTransform()->SetParent(tank->GetTransform());
+				scene->AddGameObject(wheel);
+			}
+		}
+
+		scene->AddGameObject(tank);
 	}
 #pragma endregion
 
