@@ -16,9 +16,6 @@
     <Filter Include="Object">
       <UniqueIdentifier>{dd23f47d-3ac2-4f96-9bfe-4a6fac248639}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Test">
-      <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Component">
       <UniqueIdentifier>{915d1c10-9db1-4fdb-887a-d0160f593ea1}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,9 @@
     </Filter>
     <Filter Include="Object\Component\Collider">
       <UniqueIdentifier>{054eccde-e1ba-451d-925b-5547022cbf4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Custom">
+      <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -88,7 +88,7 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="TestCameraScript.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Custom</Filter>
     </ClCompile>
     <ClCompile Include="Resources.cpp">
       <Filter>Manager</Filter>
@@ -151,11 +151,15 @@
       <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="TestDragon.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Custom</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Custom</Filter>
     </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainWater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -219,7 +223,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="TestCameraScript.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Custom</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h">
       <Filter>Manager</Filter>
@@ -282,11 +286,15 @@
       <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="TestDragon.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Custom</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Custom</Filter>
     </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainWater.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -331,6 +339,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\math.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\water.fx">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

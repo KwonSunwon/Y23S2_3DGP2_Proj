@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+#include "Timer.h"
+
 #include "Engine.h"
 #include "Material.h"
 #include "GameObject.h"
@@ -18,6 +20,7 @@
 #include "MeshData.h"
 #include "TestDragon.h"
 #include "Player.h"
+#include "TerrainWater.h"
 
 void SceneManager::Update()
 {
@@ -115,6 +118,18 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 	return picked;
 }
+float SceneManager::GetHeight(float x, float z)
+{
+	auto& gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+	for (auto& gameObject : gameObjects) {
+		if (gameObject->GetTerrain() == nullptr)
+			continue;
+
+		return gameObject->GetTerrain()->GetHeight(x, z);
+	}
+	return 0.f;
+}
+
 shared_ptr<Scene> SceneManager::LoadTestScene()
 {
 #pragma region LayerMask
@@ -150,7 +165,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		player->SetName(L"Player");
 		player->AddComponent(make_shared<Transform>());
 		player->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
-		player->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 10.f));
+		player->GetTransform()->SetLocalPosition(Vec3(50.f, 80.f, 50.f));
 
 		//player->AddComponent(make_shared<Camera>());
 		//player->GetCamera()->SetFar(10000.f);
@@ -233,6 +248,41 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+#pragma region TerrainWater
+	{
+		shared_ptr<GameObject> water = make_shared<GameObject>();
+		water->AddComponent(make_shared<Transform>());
+		water->GetTransform()->SetLocalScale(Vec3(10.f, 1.f, 10.f));
+		water->GetTransform()->SetLocalPosition(Vec3(0.f, 80.f, 0.f));
+		water->SetCheckFrustum(false);
+		water->SetStatic(true);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadTerrainMesh(257, 257);
+			meshRenderer->SetMesh(mesh);
+		}
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Water");
+			shared_ptr<Texture> texture0 = GET_SINGLE(Resources)->Load<Texture>(L"Water0", L"..\\Resources\\Texture\\Water_Base_Texture_0.dds");
+			shared_ptr<Texture> texture1 = GET_SINGLE(Resources)->Load<Texture>(L"Water1", L"..\\Resources\\Texture\\Water_Detail_Texture_0.dds");
+			shared_ptr<Texture> texture2 = GET_SINGLE(Resources)->Load<Texture>(L"Water2", L"..\\Resources\\Texture\\Water_Texture_Alpha.dds");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture0);
+			material->SetTexture(1, texture1);
+			material->SetTexture(2, texture2);
+			//material->SetFloat(0, GET_SINGLE(Timer)->GetFrameTime()); // 생각해보니 매 프레임마다 전달 해야함
+			meshRenderer->SetMaterial(material);
+
+			shared_ptr<TerrainWater> terrainWater = make_shared<TerrainWater>();
+			terrainWater->SetMaterial(material);
+			water->AddComponent(terrainWater);
+		}
+		water->AddComponent(meshRenderer);
+		scene->AddGameObject(water);
+	}
+#pragma endregion
+
 	/*
 	#pragma region Object
 		{
@@ -267,10 +317,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->AddComponent(make_shared<Terrain>());
 		obj->AddComponent(make_shared<MeshRenderer>());
 
-		obj->GetTransform()->SetLocalScale(Vec3(50.f, 250.f, 50.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -200.f, 300.f));
+		//obj->GetTransform()->SetLocalScale(Vec3(10.f, 200.f, 10.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
-		obj->GetTerrain()->Init(64, 64);
+		obj->GetTerrain()->Init(64, 64, 10.f, 200.f);
 		obj->SetCheckFrustum(false);
 
 		scene->AddGameObject(obj);

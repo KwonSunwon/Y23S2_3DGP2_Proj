@@ -6,7 +6,7 @@ enum
 {
 	MAX_LAYER = 32
 };
-
+ 
 class SceneManager
 {
 	DECLARE_SINGLE(SceneManager);
@@ -21,6 +21,7 @@ public:
 	uint8 LayerNameToIndex(const wstring& name);
 
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
+	float GetHeight(float x, float z);
 
 public:
 	shared_ptr<Scene> GetActiveScene() { return _activeScene; }
@@ -30,7 +31,7 @@ private:
 
 private:
 	shared_ptr<Scene> _activeScene;
-
+	 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
 };
